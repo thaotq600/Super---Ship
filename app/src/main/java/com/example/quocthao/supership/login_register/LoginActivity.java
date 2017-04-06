@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,16 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.example.quocthao.supership.customer.ContentCustomer;
 import com.example.quocthao.supership.customer.InfoCustomer;
-import com.example.quocthao.supership.saler.InfoSaler;
+import com.example.quocthao.supership.shop.InfoShopActivity;
 import com.example.quocthao.supership.shipper.InfoShipper;
 import com.example.quocthao.supership.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.orhanobut.hawk.Hawk;
 
 public class LoginActivity extends Activity {
@@ -122,7 +119,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                intentInfo = new Intent(LoginActivity.this, InfoSaler.class);
+                intentInfo = new Intent(LoginActivity.this, InfoShopActivity.class);
                 startActivity(intentInfo);
             }
         });

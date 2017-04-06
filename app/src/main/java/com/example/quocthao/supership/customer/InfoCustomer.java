@@ -67,6 +67,7 @@ public class InfoCustomer extends AppCompatActivity {
                 drCustomer.child(userCustomer.getUid()).child("name").setValue(etName.getText().toString());
                 drCustomer.child(userCustomer.getUid()).child("address").setValue(etAddress.getText().toString());
                 drCustomer.child(userCustomer.getUid()).child("phone").setValue(etPhone.getText().toString());
+                drCustomer.child(userCustomer.getUid()).child("email").setValue(userCustomer.getEmail());
 
                 Hawk.put("name", etName.getText().toString());
                 Intent intentContent = new Intent(InfoCustomer.this, ContentCustomer.class);

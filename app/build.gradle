@@ -34,6 +34,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.orhanobut:hawk:2.0.1'
     testCompile 'junit:junit:4.12'
+    compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
+
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0' //Retrofit
+    compile 'com.parse.bolts:bolts-tasks:1.4.0' //Task Bolts
 }
 
 apply plugin: 'com.google.gms.google-services'
