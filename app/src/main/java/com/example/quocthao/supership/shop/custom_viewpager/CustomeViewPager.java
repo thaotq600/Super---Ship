@@ -15,7 +15,7 @@ public class CustomeViewPager extends ViewPager {
 
     public CustomeViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.enabled = true;
+        this.enabled = false;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CustomeViewPager extends ViewPager {
     public boolean onTouchEvent(MotionEvent ev) {
         if(this.enabled)
             return super.onTouchEvent(ev);
-        return true;
+        return false;
     }
 
     public void setPagingEnabled(boolean enabled) {

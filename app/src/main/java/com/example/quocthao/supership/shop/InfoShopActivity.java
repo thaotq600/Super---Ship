@@ -22,22 +22,22 @@ public class InfoShopActivity extends AppCompatActivity {
     private Intent intentContent;
     private EditText etName, etAddress, etPhone;
     private FirebaseUser userShop = FirebaseAuth.getInstance().getCurrentUser();
-    private DatabaseReference drShop = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference drShop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_info);
         initValue();
-
-        //drShop = drShop.child("infomation").child("shop").child(userShop.getUid());
+        drShop = FirebaseDatabase.getInstance().getReference();
+        drShop = drShop.child("infomation").child("shop").child(userShop.getUid());
         intentContent = new Intent(InfoShopActivity.this, ContentShopActivity.class);
-        //readInfo();
+        readInfo();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //saveInfo();
+                saveInfo();
                 startActivity(intentContent);
             }
         });

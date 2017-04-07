@@ -32,27 +32,27 @@ public class MapOrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_orders_map, container, false);
 
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.btn_wait);
-        final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.framelayout);
-        final ImageView ivPlus = (ImageView) view.findViewById(R.id.iv_plus);
-        final ImageView ivMinus = (ImageView) view.findViewById(R.id.iv_minus);
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(check) {
-                    ivPlus.setVisibility(View.GONE);
-                    ivMinus.setVisibility(View.VISIBLE);
-                    frameLayout.setVisibility(View.VISIBLE);
-                    check = false;
-                } else {
-                    ivPlus.setVisibility(View.VISIBLE);
-                    ivMinus.setVisibility(View.GONE);
-                    frameLayout.setVisibility(View.GONE);
-                    check = true;
-                }
-            }
-        });
+//        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.btn_wait);
+//        final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.framelayout);
+//        final ImageView ivPlus = (ImageView) view.findViewById(R.id.iv_plus);
+//        final ImageView ivMinus = (ImageView) view.findViewById(R.id.iv_minus);
+//
+//        linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(check) {
+//                    ivPlus.setVisibility(View.GONE);
+//                    ivMinus.setVisibility(View.VISIBLE);
+//                    frameLayout.setVisibility(View.VISIBLE);
+//                    check = false;
+//                } else {
+//                    ivPlus.setVisibility(View.VISIBLE);
+//                    ivMinus.setVisibility(View.GONE);
+//                    frameLayout.setVisibility(View.GONE);
+//                    check = true;
+//                }
+//            }
+//        });
 
         return view;
     }

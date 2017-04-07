@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.quocthao.supership.R;
 import com.example.quocthao.supership.objects.ObjBill;
+import com.example.quocthao.supership.objects.ObjInfo;
+import com.example.quocthao.supership.shop.services.DataService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,23 +24,37 @@ import com.google.firebase.database.ValueEventListener;
 import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import bolts.Continuation;
+import bolts.Task;
+
 public class WaitShipFragment extends Fragment {
 
     private ListView lvBill;
     private QuickAdapter quickAdapter;
-    private FirebaseUser userShop = FirebaseAuth.getInstance().getCurrentUser();
-    private DatabaseReference drShop = FirebaseDatabase.getInstance().getReference();
-    private ObjBill bill = new ObjBill();
+    private FirebaseUser userShop;
+    private DatabaseReference drShop;
+    private ArrayList<ObjBill> listBills;
+    private DataService dataService;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_manage_wait_ship, container, false);
+        userShop = FirebaseAuth.getInstance().getCurrentUser();
+        drShop = FirebaseDatabase.getInstance().getReference();
+        listBills = new ArrayList<>();
+        dataService = new DataService();
 
         lvBill = (ListView) view.findViewById(R.id.manage_wait_ship_lv_bill);
-        String idOrder = "123";
-        drShop = drShop.child("shop").child(userShop.getUid()).child("bills").child(idOrder);
 
         quickAdapter = new QuickAdapter<ObjBill>(getContext(), R.layout.item_orders_ship) {
             @Override
@@ -49,70 +65,61 @@ public class WaitShipFragment extends Fragment {
 
         };
 
-        readBills();
+        dataService.loadBill().continueWith(new Continuation<HashMap<String,ObjBill>, Object>() {
+            @Override
+            public Object then(Task<HashMap<String, ObjBill>> task) throws Exception {
+
+                for (HashMap.Entry<String, ObjBill> bill : task.getResult().entrySet()) {
+                    listBills.add(bill.getValue());
+                }
+
+                quickAdapter.addAll(listBills);
+                lvBill.setAdapter(quickAdapter);
+
+                readBills();
+                
+                return null;
+            }
+        }, Task.UI_THREAD_EXECUTOR);
 
         return view;
     }
 
     private void readBills(){
-        drShop.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        lvBill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                bill.setAddressSend(dataSnapshot.child("address_send").getValue().toString());
-                bill.setAddressReceive(dataSnapshot.child("address_receive").getValue().toString());
-                bill.setTimeOut(dataSnapshot.child("time_out").getValue().toString());
-                bill.setCategory(dataSnapshot.child("category").getValue().toString());
-                bill.setWeight(dataSnapshot.child("weight").getValue().toString());
-                bill.setMoneyItem(dataSnapshot.child("money_item").getValue().toString());
-                bill.setMoneyShip(dataSnapshot.child("money_ship").getValue().toString());
-                bill.setPhoneSender(dataSnapshot.child("phone_sender").getValue().toString());
-                bill.setPhoneReceiver(dataSnapshot.child("phone_receiver").getValue().toString());
-                bill.setNote(dataSnapshot.child("note").getValue().toString());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                View viewDialog = LayoutInflater.from(getContext())
+                        .inflate(R.layout.dialog_content_bill, null);
 
-                quickAdapter.add(bill);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setView(viewDialog);
 
-                lvBill.setAdapter(quickAdapter);
+                final TextView etAddressSend = (TextView) viewDialog.findViewById(R.id.content_bill_tv_address_send);
+                final TextView etAddressReceive = (TextView) viewDialog.findViewById(R.id.content_bill_tv_address_receive);
+                final TextView etTimeOut = (TextView) viewDialog.findViewById(R.id.content_bill_tv_time_out);
+                final TextView etCategory = (TextView) viewDialog.findViewById(R.id.content_bill_tv_category);
+                final TextView etWeight = (TextView) viewDialog.findViewById(R.id.content_bill_tv_weight);
+                final TextView etMoneyItem = (TextView) viewDialog.findViewById(R.id.content_bill_tv_money_item);
+                final TextView etMoneyShip = (TextView) viewDialog.findViewById(R.id.content_bill_tv_money_ship);
+                final TextView etPhoneSender = (TextView) viewDialog.findViewById(R.id.content_bill_tv_phone_sender);
+                final TextView etPhoneReceiver = (TextView) viewDialog.findViewById(R.id.content_bill_tv_phone_receiver);
+                final TextView etNote = (TextView) viewDialog.findViewById(R.id.content_bill_tv_note);
 
-                lvBill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        View viewDialog = LayoutInflater.from(getContext())
-                                .inflate(R.layout.dialog_content_bill, null);
+                etAddressSend.append(listBills.get(position).getAddressSend());
+                etAddressReceive.append(listBills.get(position).getAddressReceive());
+                etTimeOut.append(listBills.get(position).getTimeOut());
+                etCategory.append(listBills.get(position).getCategory());
+                etWeight.append(listBills.get(position).getWeight());
+                etMoneyItem.append(listBills.get(position).getMoneyItem());
+                etMoneyShip.append(listBills.get(position).getMoneyShip());
+                etPhoneSender.append(listBills.get(position).getPhoneSender());
+                etPhoneReceiver.append(listBills.get(position).getPhoneReceiver());
+                etNote.append(listBills.get(position).getNote());
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setView(viewDialog);
-
-                        final TextView etAddressSend = (TextView) viewDialog.findViewById(R.id.content_bill_tv_address_send);
-                        final TextView etAddressReceive = (TextView) viewDialog.findViewById(R.id.content_bill_tv_address_receive);
-                        final TextView etTimeOut = (TextView) viewDialog.findViewById(R.id.content_bill_tv_time_out);
-                        final TextView etCategory = (TextView) viewDialog.findViewById(R.id.content_bill_tv_category);
-                        final TextView etWeight = (TextView) viewDialog.findViewById(R.id.content_bill_tv_weight);
-                        final TextView etMoneyItem = (TextView) viewDialog.findViewById(R.id.content_bill_tv_money_item);
-                        final TextView etMoneyShip = (TextView) viewDialog.findViewById(R.id.content_bill_tv_money_ship);
-                        final TextView etPhoneSender = (TextView) viewDialog.findViewById(R.id.content_bill_tv_phone_sender);
-                        final TextView etPhoneReceiver = (TextView) viewDialog.findViewById(R.id.content_bill_tv_phone_receiver);
-                        final TextView etNote = (TextView) viewDialog.findViewById(R.id.content_bill_tv_note);
-
-                        etAddressSend.append(bill.getAddressSend());
-                        etAddressReceive.append(bill.getAddressReceive());
-                        etTimeOut.append(bill.getTimeOut());
-                        etCategory.append(bill.getCategory());
-                        etWeight.append(bill.getWeight());
-                        etMoneyItem.append(bill.getMoneyItem());
-                        etMoneyShip.append(bill.getMoneyShip());
-                        etPhoneSender.append(bill.getPhoneSender());
-                        etPhoneReceiver.append(bill.getPhoneReceiver());
-                        etNote.append(bill.getNote());
-
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
             }
         });

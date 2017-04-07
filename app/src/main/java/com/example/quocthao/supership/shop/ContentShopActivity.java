@@ -44,6 +44,7 @@ public class ContentShopActivity extends AppCompatActivity{
         iCreateSuccessListener = new CreateOrdersFragment.ICreateSuccessListener() {
             @Override
             public void onSuccess() {
+                vpOrder.setCurrentItem(0);
                 vpOrder.setCurrentItem(2);
             }
         };

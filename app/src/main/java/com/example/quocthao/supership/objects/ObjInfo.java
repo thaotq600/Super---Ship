@@ -10,13 +10,10 @@ public class ObjInfo {
 
     @SerializedName("address")
     private String infoAddress;
-
     @SerializedName("name")
     private String infoName;
-
     @SerializedName("phone")
     private String infoPhone;
-
     @SerializedName("email")
     private String email;
 

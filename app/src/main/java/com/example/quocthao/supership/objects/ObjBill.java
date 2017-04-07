@@ -1,19 +1,31 @@
 package com.example.quocthao.supership.objects;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Quoc Thao on 4/6/2017.
  */
 
 public class ObjBill {
+    @SerializedName("address_send")
     private String addressSend;
+    @SerializedName("address_receive")
     private String addressReceive;
+    @SerializedName("time_out")
     private String timeOut;
+    @SerializedName("category")
     private String category;
+    @SerializedName("weight")
     private String weight;
+    @SerializedName("money_item")
     private String moneyItem;
+    @SerializedName("money_ship")
     private String moneyShip;
+    @SerializedName("phone_sender")
     private String phoneSender;
+    @SerializedName("phone_receiver")
     private String phoneReceiver;
+    @SerializedName("note")
     private String note;
 
     public ObjBill() {
